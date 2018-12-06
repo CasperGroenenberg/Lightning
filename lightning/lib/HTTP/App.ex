@@ -1,47 +1,36 @@
 defmodule App do
-  @moduledoc """
-  Documentation for Lightning.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Lightning.hello
-      :world
-
-  """
     use Lightning.HTTP
-    import Lightning.HTTP.Response
     
 
-    def route("GET", ["resp"], conn, res) do
+    def route("GET", ["json"], conn, res) do
         conn 
         |> res.put_resp_header("Server", "Plug")
          
-        # conn |> res.send_resp(200, "Hello, from res.send_resp")
-    
-        Lightning.HTTP.Response.json(conn, res, 200, "Hello from json response")
+        Lightning.HTTP.send_json(conn, res, 200, %{"age" => 27, "name" => "Devin Torres"})
     end
     
 
-    def route("GET", ["hello"], conn) do
-        conn |> Plug.Conn.send_resp(200, "Hello from route /hello")
+    def route("GET", ["text"], conn, res) do
+        conn 
+        |> res.put_resp_header("Server", "Plug")
+
+        Lightning.HTTP.text(conn, res, 200, "Hello from text response")
     end
 
-    def route("GET", ["user", user_id], conn) do
-        conn |> Plug.Conn.send_resp(200, "Requested the user with id #{user_id}")
+
+    def route("POST", ["parse", user_id], conn, res) do
+        
+
+        Lightning.HTTP.parse_json(conn, res, 200, "Hello from text response")
     end
+
+
+    
 
     def route(_method, _path, conn) do
     # this route is called if no other routes match
             conn |> Plug.Conn.send_resp(404, "Couldn't find page")
     end
-
-
-  
-
 end
 
 
