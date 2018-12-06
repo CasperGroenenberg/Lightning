@@ -14,10 +14,15 @@ defmodule Lightning.HTTP do
       locate to localhost:4000 in the browser
 
   """
+
+
+
+
   defmacro __using__(_opts) do
     quote do
       def init(options) do
         IO.puts "starting up Server"
+        IO.puts options
         options
       end
 
@@ -35,10 +40,10 @@ defmodule Lightning.HTTP do
 
   ## return a text response
 
-      Lightning.HTTP.text(conn, res, status, body)
+      Lightning.HTTP.send_text(conn, res, status, body)
 
   """
-    def text(conn, res, status, body) do
+    def send_text(conn, res, status, body) do
         conn |> res.send_resp(status, body)
     end
 
@@ -48,7 +53,7 @@ defmodule Lightning.HTTP do
 
   ## return a JSON response
 
-      Lightning.HTTP.json(conn, res, status, json)
+      Lightning.HTTP.send_json(conn, res, status, json)
 
   """
     def send_json(conn, res, status, body) do
@@ -56,6 +61,13 @@ defmodule Lightning.HTTP do
 
         conn |> res.send_resp(status, resp_body)
     end
+
+
+     def parse_body(conn, opts \\ []) do
+        opts = Keyword.put_new(opts, :parsers, [Plug.Parsers.URLENCODED, Plug.Parsers.MULTIPART])
+        Plug.Parsers.call(conn, Plug.Parsers.init(opts))
+    end
+
 
     def parse_json(conn, res, status, body) do
         IO.puts "parsing JSON"

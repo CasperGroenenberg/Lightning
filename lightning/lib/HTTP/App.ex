@@ -1,6 +1,6 @@
 defmodule App do
     use Lightning.HTTP
-    
+
 
     def route("GET", ["json"], conn, res) do
         conn 
@@ -14,14 +14,29 @@ defmodule App do
         conn 
         |> res.put_resp_header("Server", "Plug")
 
-        Lightning.HTTP.text(conn, res, 200, "Hello from text response")
+        Lightning.HTTP.send_text(conn, res, 200, "Hello from text response")
     end
 
 
-    def route("POST", ["parse", user_id], conn, res) do
+    def route("POST", ["parse"], conn, res) do
+
+
+        # name = conn.params["name"]
+        # age = conn.params["age"]
+        # IO.puts name
+        # IO.puts age
+        # {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+        # {:ok, body, conn} = Plug.Conn.read_body(conn)
+        # parsed_body = Poison.Parser.parse!(body)
+        # IO.puts "The body is #{parsed_body}, #{inspect is_map(parsed_body))"
         
 
-        Lightning.HTTP.parse_json(conn, res, 200, "Hello from text response")
+        conn = Lightning.HTTP.parse_body(conn)
+        name = conn.params["name"]
+
+        
+        Lightning.HTTP.send_text(conn, res, 200, "Hello from text response" <> name)
     end
 
 
