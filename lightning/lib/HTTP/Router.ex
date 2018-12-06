@@ -6,7 +6,9 @@ defmodule Router do
         options
       end
       def call(conn, _opts) do
-        route(conn.method, conn.path_info, conn)
+          res = Plug.Conn
+          
+        route(conn.method, conn.path_info, conn, res)
       end
     end
   end
