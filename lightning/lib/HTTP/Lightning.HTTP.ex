@@ -1,45 +1,17 @@
 defmodule Lightning.HTTP do
-  @moduledoc """
-  Documentation for Lightning.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Lightning.hello
-      :world
-
-  """
-    import Lightning.HTTP.Response
-    use Router
-
-    def route("GET", ["resp"], conn, res) do
-        conn 
-        |> res.put_resp_header("Server", "Plug")
-         
-        # conn |> res.send_resp(200, "Hello, from res.send_resp")
-    
-        Lightning.HTTP.Response.json(conn, res, 200, "FizzBuzz")
+  defmacro __using__(_opts) do
+    quote do
+      def init(options) do
+        IO.puts "starting up Server"
+        options
+      end
+      def call(conn, _opts) do
+          res = Plug.Conn
+          
+        route(conn.method, conn.path_info, conn, res)
+      end
     end
+  end
 
-    def route("GET", ["hello"], conn) do
-        conn |> Plug.Conn.send_resp(200, "Hello from route /hello")
-    end
-
-    def route("GET", ["user", user_id], conn) do
-        conn |> Plug.Conn.send_resp(200, "Requested the user with id #{user_id}")
-    end
-
-    def route(_method, _path, conn) do
-    # this route is called if no other routes match
-            conn |> Plug.Conn.send_resp(404, "Couldn't find page")
-    end
-
-
-  
-
+ 
 end
-
-
