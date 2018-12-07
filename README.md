@@ -15,18 +15,18 @@ Create a new file (App.ex)
 
 ```
 defmodule App do
-  ###Use the Lightning HTTP library
+  <!-- Use the Lightning HTTP library -->
   use Lightning.HTTP
 
 
  ###Send an JSON response with a statuscode of 200:
  Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
 
- ###Create a new route endpoint:
- ###Route: GET "/json/"
+ <!-- Create a new route endpoint:  -->
+ <!-- Route: GET "/json/" -->
  def route("GET", ["json"], conn, res) do
 
-    ### Set additional response information (based on Plug responses):
+    <!-- Set additional response information (based on Plug responses): -->
     conn 
     |> res.put_resp_header("Hello", "World")
     |> res.put_resp_content_type("application/json")
@@ -34,7 +34,7 @@ defmodule App do
     |> res.put_resp_header("X-Delivered-By", "myapp")
     |> res.put_status(202)
 
-    ### Send an JSON response with a statuscode of 200:
+    <!-- Send an JSON response with a statuscode of 200: -->
     Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
 end
 
