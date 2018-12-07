@@ -1,6 +1,6 @@
 # Lightning
 
-View the docs: https://hexdocs.pm/lightning/Lightning.html<br>
+View the docs: https://hexdocs.pm/lightning/Lightning.HTTP.html<br>
 
 Lightning is an Elixir library for making simple REST API endpoints based on Plug
 
