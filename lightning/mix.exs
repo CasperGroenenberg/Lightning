@@ -9,6 +9,7 @@ defmodule Lightning.MixProject do
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       description: description(),
+      package: package(),
       deps: deps(),
      
       # Docs
@@ -40,5 +41,14 @@ defmodule Lightning.MixProject do
 
   defp description() do
     "Library for making simple REST API endpoints based on Plug"
+  end
+
+    defp package() do
+    %{
+      licenses: ["Apache 2"],
+      maintainers: ["Casper Groenenberg"],
+      links: %{"GitHub" => "https://github.com/casperCX/lightning"},
+      files: ["lib", "mix.exs", "README.md", "CHANGELOG.md", "LICENSE"]
+    }
   end
 end
