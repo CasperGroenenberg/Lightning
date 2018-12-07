@@ -47,10 +47,7 @@ defmodule App do
         |> res.put_resp_header("Server", "Plug")
         |> res.put_resp_content_type("text/html")
 
-        # case App.Repo.get(User, id) do
-        #       nil -> Lightning.HTTP.send_text(conn, res, 404, "User with ID" <> id <> " not found, sorry")
-        #       user -> Lightning.HTTP.send_eex(conn, res, 200, "templates/show_user.eex", [user_id: user_id])
-        # end
+        
 
         # Lightning.HTTP.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
         Lightning.HTTP.send_eex(conn, res, 200, template_show_user(user_id))
