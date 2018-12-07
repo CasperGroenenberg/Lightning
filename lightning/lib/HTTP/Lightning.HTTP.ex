@@ -15,7 +15,6 @@ defmodule Lightning.HTTP do
         # Use the Lightning HTTP library
         use Lightning.HTTP
    
-
         # Create a new route endpoint:
         # Route: GET "/json/"
         def route("GET", ["json"], conn, res) do
@@ -141,11 +140,11 @@ defmodule Lightning.HTTP do
             |> res.put_resp_content_type("text/html")
 
             # Example using Ecto, returning different responses based on condition:
-            case App.Repo.get(User, id) do
+            case App.Repo.get(User, user_id) do
                 nil 
-                    -> Lightning.HTTP.send_text(conn, res, 404, "User with ID" <> id <> " not found")
+                    -> Lightning.HTTP.send_text(conn, res, 404, "User with ID" <> user_id <> " not found")
                 user 
-                    -> Lightning.HTTP.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: id])
+                    -> Lightning.HTTP.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
             end
         end
 

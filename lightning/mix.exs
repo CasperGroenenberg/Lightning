@@ -18,6 +18,7 @@ defmodule Lightning.MixProject do
       homepage_url: "https://github.com/casperCX/lightning",
       docs: [
         main: "Lightning.HTTP", 
+        logo: "./lightning_logo_small.png",
         extras: ["README.md"]
       ]
     ]
