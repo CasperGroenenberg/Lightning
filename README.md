@@ -34,8 +34,6 @@ defmodule App do
     Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
 end
 ```
-
------------------------------------------
 # Running the server
 ```
 Start up a server using the iex command:
