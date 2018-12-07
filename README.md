@@ -28,7 +28,7 @@ defmodule App do
     |> res.put_status(202)
 
     #Send an JSON response with a statuscode of 200:
-    Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper G"})
+    Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
 end
 ```
 # Running the server
@@ -38,9 +38,9 @@ Start up a server using the iex command:
     iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
 
 Navigating to localhost:4000/json will output JSON response:
-{"name":"Casper G","age":26}
+{"name":"Casper","age":26}
 ```
 
 # Example Code
 
-![code example](https://i.imgur.com/EU6OJVG.png)
+![code example](https://i.imgur.com/HZDMEve.png)
