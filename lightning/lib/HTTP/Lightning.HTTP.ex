@@ -1,7 +1,6 @@
 defmodule Lightning.HTTP do
     require EEx
 
-    
     @moduledoc """
 
     Lightning is a library for making simple fast REST API endpoints based on Plug
@@ -23,11 +22,10 @@ defmodule Lightning.HTTP do
 
             # Set additional response information (based on Plug responses):
             conn 
-            |> res.put_resp_header("Hello", "World")
+            |> res.put_resp_header("Header", "Here")
             |> res.put_resp_content_type("application/json")
             |> res.put_resp_cookie("abc", "def")
-            |> res.put_resp_header("X-Delivered-By", "myapp")
-            |> res.put_status(202)
+            |> res.put_status(200)
             
             # Send an JSON response with a statuscode of 200:
             Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
@@ -41,7 +39,6 @@ defmodule Lightning.HTTP do
 
         # Navigating to localhost:4000/json will output JSON response:
         # {"name":"Casper Groenenberg","age":26}
-
 
     """
 
@@ -86,7 +83,7 @@ defmodule Lightning.HTTP do
 
             # Set additional response information:
             conn 
-            |> res.put_resp_header("Hello", "World")
+            |> res.put_resp_header("Header", "Here")
             |> res.put_resp_content_type("text/html")
 
             # Send an text response with a statuscode of 200:
@@ -112,11 +109,11 @@ defmodule Lightning.HTTP do
 
             # Set additional response information:
             conn 
-            |> res.put_resp_header("Hello", "World")
+            |> res.put_resp_header("Header", "Here")
             |> res.put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
-            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
+            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper G"})
         end
 
     """
@@ -140,7 +137,7 @@ defmodule Lightning.HTTP do
 
             # Set additional response information
             conn 
-            |> res.put_resp_header("Hello", "World")
+            |> res.put_resp_header("Header", "Here")
             |> res.put_resp_content_type("text/html")
 
             # Example using Ecto, returning different responses based on condition:
@@ -193,11 +190,8 @@ defmodule Lightning.HTTP do
             |> res.put_resp_content_type("text/html")
             |> res.put_resp_cookie("abc", "def")
 
-            # Parse the body
-            conn = Lightning.HTTP.parse_body(conn)
-
-            # Get the value of key
-            name = conn.params["name"]
+            # Parse the body and get value of key 'name'
+            name = Lightning.HTTP.parse_body(conn).params["name"]
 
             # Return a text response with status code 200, and "Hello <name>" as response
             Lightning.HTTP.send_text(conn, res, 200, "Hello " <> name)
