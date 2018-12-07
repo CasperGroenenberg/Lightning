@@ -28,7 +28,7 @@ defmodule Lightning.HTTP do
             |> res.put_status(200)
             
             # Send an JSON response with a statuscode of 200:
-            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
+            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper G"})
         end
 
 
