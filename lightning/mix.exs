@@ -6,9 +6,11 @@ defmodule Lightning.MixProject do
       app: :lightning,
       version: "0.1.0",
       elixir: "~> 1.6",
-      start_permanent: Mix.env() == :prod,
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      description: description(),
       deps: deps(),
-
+     
       # Docs
       name: "Lightning",
       source_url: "https://github.com/casperCX/lightning",
@@ -34,5 +36,9 @@ defmodule Lightning.MixProject do
     {:poison, "~> 3.1"},
     {:plug, "~> 1.7"}
     ]
+  end
+
+  defp description() do
+    "Library for making simple REST API endpoints based on Plug"
   end
 end
