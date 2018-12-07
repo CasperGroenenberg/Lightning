@@ -40,3 +40,7 @@ Start up a server using the iex command:
 Navigating to localhost:4000/json will output JSON response:
 {"name":"Casper G","age":26}
 ```
+
+# Example Code
+
+![code example](https://i.imgur.com/5FBQnvq.png)
