@@ -1,13 +1,11 @@
 defmodule App do
 
     require EEx
-    # EEx.function_from_file :defp, :template_show_user, "templates/show_user.eex", [:user_id]
-    EEx.function_from_file(:defp, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user_id])
-
     use Lightning.HTTP
+   
+    EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user_id])
     
     
-
 
     def route("GET", ["json"], conn, res) do
         conn 
@@ -51,17 +49,12 @@ defmodule App do
 
         # case App.Repo.get(User, id) do
         #       nil -> Lightning.HTTP.send_text(conn, res, 404, "User with ID" <> id <> " not found, sorry")
-        #       user -> Lightning.HTTP.send_eex(conn, res, 200, "templates/show_user.eex", [user: user])
+        #       user -> Lightning.HTTP.send_eex(conn, res, 200, "templates/show_user.eex", [user_id: user_id])
         # end
 
-        # Lightning.HTTP.send_eex(conn, res, 200, "templates/show_user.eex", [user_id: user_id])
+        # Lightning.HTTP.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
         Lightning.HTTP.send_eex(conn, res, 200, template_show_user(user_id))
-        # page_contents = EEx.eval_file("templates/show_user.eex", [user_id: user_id])
-
-        # page_contents = template_show_user(user_id)
-        # conn |> res.put_resp_content_type("text/html") |> res.send_resp(200, page_contents)      
-
-        # Lightning.HTTP.send_text(conn, res, 200, "Hello from text response:" <> user_id)
+ 
     end
 
 

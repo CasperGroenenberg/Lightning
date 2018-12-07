@@ -1,51 +1,58 @@
 defmodule Lightning.HTTP do
+    require EEx
 
- @moduledoc """
-  Documentation for Lightning HTTP Module.
-  """
+    
+    @moduledoc """
+    Documentation for Lightning HTTP Module.
+    """
 
-  @doc """
-  Start a server.
+    @doc """
+    Start a server.
 
-  ## Start up the REST server
+    ## Start up the REST server
 
-      iex -S mix
-      iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
-      
-      locate to localhost:4000 in the browser
+        iex -S mix
+        iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
+        
+        locate to localhost:4000 in the browser
 
-  """
-  defmacro __using__(_opts) do
-    quote do
-      def init(options) do
-        IO.puts "starting up Server"
-        options
-      end
+    """
+    
+    defmacro __using__(_opts) do
+        quote do
+            def init(options) do
+                IO.puts "starting up Server"
+                options
+            end
 
-      def call(conn, _opts) do
-          res = Plug.Conn
-          
-          # TODO
-          # Parse path info as string: example/group/1
-          # conn.request_path
+        def call(conn, _opts) do
+            res = Plug.Conn
+            
+            # TODO
+            # Parse path info as string: example/group/1
+            # conn.request_path
 
-        route(conn.method, conn.path_info, conn, res)
-      end
+            route(conn.method, conn.path_info, conn, res)
+        end
+        end
     end
-  end
 
 
-  @doc """
-  Text Response.
 
-  ## return a text response
 
-      Lightning.HTTP.send_text(conn, res, status, body)
 
-  """
+    @doc """
+    Text Response.
+
+    ## return a text response
+
+        Lightning.HTTP.send_text(conn, res, status, body)
+
+    """
     def send_text(conn, res, status, body) do
         conn |> res.send_resp(status, body)
     end
+
 
 
     @doc """
@@ -72,6 +79,7 @@ defmodule Lightning.HTTP do
     end
 
 
+
     @doc """
     Send an EEx file as response.
 
@@ -94,9 +102,18 @@ defmodule Lightning.HTTP do
             end
         end
     """
-    def send_eex(conn, res, status, template) do
-        conn |> res.send_resp(status, template)
+    def send_eex(conn, res, status, template, vars \\ []) do
+        case vars do
+            # Precompiled version
+            [] -> conn |> res.send_resp(status, template)
+
+            _  ->  page_contents = EEx.eval_file(template, vars) 
+                    conn |> res.send_resp(status, page_contents)
+
+        end   
     end
+
+
 
     @doc """
     Parse the incoming request body.
