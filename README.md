@@ -15,9 +15,6 @@ Create a new file (App.ex)
 defmodule App do 
    use Lightning.HTTP
 
- #Send an JSON response with a statuscode of 200:
- Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper Groenenberg"})
-
  #Create a new route endpoint
  #Route: GET "/json/" -->
  def route("GET", ["json"], conn, res) do
