@@ -35,7 +35,6 @@ defmodule App do
 end
 ```
 
-
 -----------------------------------------
 # Running the server
 ```
@@ -44,5 +43,5 @@ Start up a server using the iex command:
     iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
 
 Navigating to localhost:4000/json will output JSON response:
-{"name":"Casper Groenenberg","age":26}
+{"name":"Casper G","age":26}
 ```
