@@ -1,6 +1,6 @@
 # Lightning
 
-View the docs: https://hexdocs.pm/lightning/Lightning.HTTP.html<br>
+View the docs: https://hexdocs.pm/lightning/Lightning.html<br>
 
 Lightning is an Elixir library for making simple REST API endpoints based on Plug
 
@@ -13,7 +13,7 @@ Create a new file (App.ex)
 
 ```
 defmodule App do 
-   use Lightning.HTTP
+   use Lightning
 
  #Create a new route endpoint
  #Route: GET "/json/" -->
@@ -25,10 +25,10 @@ defmodule App do
     |> res.put_resp_content_type("application/json")
     |> res.put_resp_cookie("abc", "def")
     |> res.put_resp_header("X-Delivered-By", "myapp")
-    |> res.put_status(202)
+    |> res.put_status(200)
 
     #Send an JSON response with a statuscode of 200:
-    Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
+    Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
 end
 ```
 # Running the server
@@ -43,4 +43,4 @@ Navigating to localhost:4000/json will output JSON response:
 
 # Example Code
 
-![code example](https://i.imgur.com/OjuEYrG.png)
+![code example](https://i.imgur.com/cg2lN5Z.png)
