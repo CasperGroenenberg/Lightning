@@ -142,9 +142,9 @@ defmodule Lightning do
             # Example using Ecto, returning different responses based on condition:
             case App.Repo.get(User, user_id) do
                 nil 
-                    -> Lightning.send_text(conn, res, 404, "User with ID" <> user_id <> " not found")
+                    -> Lightning.send_text(conn, res, 404, "User with ID " <> user_id <> " not found")
                 user 
-                    -> Lightning.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
+                    -> Lightning.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user: user, user_id: user_id])
             end
         end
 
@@ -155,10 +155,10 @@ defmodule Lightning do
 
         defmodule App do
             require EEx
-            EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user_id])
+            EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user, :user_id])
 
-        # and now use its pre-compiled version passing in the user_id as an argument:
-        Lightning.send_eex(conn, res, 200, template_show_user(user_id)) #
+        # and now use its pre-compiled version passing in the user and user_id as arguments:
+        Lightning.send_eex(conn, res, 200, template_show_user(user, user_id)) #
         
     """
     def send_eex(conn, res, status, template, vars \\ []) do
@@ -181,7 +181,7 @@ defmodule Lightning do
 
         EXAMPLE:
 
-        # Route: POST "/parse/"
+        # Route: POST "/parse?name=casper"
         def route("POST", ["parse"], conn, res) do
 
             # Set additional response information:
