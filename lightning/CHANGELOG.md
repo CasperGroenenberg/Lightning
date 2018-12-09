@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.3 (2018-12-9)
+
+  * Created abstraction (Lightning.start) for server startup
+
 ## v0.1.2 (2018-12-9)
 
   * Changed ambiguous naming of module Lightning.HTTP to Lightning

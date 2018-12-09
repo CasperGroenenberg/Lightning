@@ -4,7 +4,7 @@ defmodule Lightning do
     @moduledoc """
 
     Lightning is a library for making simple fast REST API endpoints based on Plug
-
+    WARNING: API subject to change in future 0.x versions
 
     ## How to get started:
 
@@ -34,24 +34,14 @@ defmodule Lightning do
         -----------------------------------------
         Start up a server using the iex command:
             iex -S mix
-            iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
+            iex> {:ok, _} = Lightning.start(5000, App)
 
-        # Navigating to localhost:4000/json will output JSON response:
+        # Navigating to localhost:5000/json will output JSON response:
         # {"name":"Casper","age":26}
 
     """
 
-    @doc """
-    Start the server.
-
-    ## Start up the server
-
-        iex -S mix
-        iex> {:ok, _} = Plug.Adapters.Cowboy.http <Name_of_module>, []
-        
-        # Locate to localhost:4000/ in the browser
-
-    """
+ 
     defmacro __using__(_opts) do
         quote do
             def init(options) do
@@ -65,6 +55,26 @@ defmodule Lightning do
             route(conn.method, conn.path_info, conn, res)
         end
         end
+    end
+
+
+    @doc """
+    Start the server.
+
+    ## Start up the server
+
+        EXAMPLE:
+
+        Lightning.start(<port>, <module_name>, <environment>)
+
+        iex -S mix
+        iex> {:ok, _} = Lightning.start(5000, App, :dev)
+        
+        # Locate to localhost:5000/ in the browser
+
+    """
+    def start(port, module, environment \\ :dev) do
+        {:ok, _} = Plug.Adapters.Cowboy.http(module, [], port: port)
     end
 
 
