@@ -1,4 +1,4 @@
-defmodule Lightning.HTTP do
+defmodule Lightning do
     require EEx
 
     @moduledoc """
@@ -6,14 +6,14 @@ defmodule Lightning.HTTP do
     Lightning is a library for making simple fast REST API endpoints based on Plug
 
 
-    How to get started:
+    ## How to get started:
 
         Create a new file (App.ex)
 
         defmodule App do
 
-        # Use the Lightning HTTP library
-        use Lightning.HTTP
+        # Use the Lightning library
+        use Lightning
    
         # Create a new route endpoint:
         # Route: GET "/json/"
@@ -27,7 +27,7 @@ defmodule Lightning.HTTP do
             |> res.put_status(200)
             
             # Send an JSON response with a statuscode of 200:
-            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper G"})
+            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
         end
 
 
@@ -37,7 +37,7 @@ defmodule Lightning.HTTP do
             iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
 
         # Navigating to localhost:4000/json will output JSON response:
-        # {"name":"Casper Groenenberg","age":26}
+        # {"name":"Casper","age":26}
 
     """
 
@@ -86,7 +86,7 @@ defmodule Lightning.HTTP do
             |> res.put_resp_content_type("text/html")
 
             # Send an text response with a statuscode of 200:
-            Lightning.HTTP.send_text(conn, res, 200, "Hello from text response " <> firstname <> lastname)
+            Lightning.send_text(conn, res, 200, "Hello from text response " <> firstname <> lastname)
         end
 
     """
@@ -112,7 +112,7 @@ defmodule Lightning.HTTP do
             |> res.put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
-            Lightning.HTTP.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper G"})
+            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
         end
 
     """
@@ -142,9 +142,9 @@ defmodule Lightning.HTTP do
             # Example using Ecto, returning different responses based on condition:
             case App.Repo.get(User, user_id) do
                 nil 
-                    -> Lightning.HTTP.send_text(conn, res, 404, "User with ID" <> user_id <> " not found")
+                    -> Lightning.send_text(conn, res, 404, "User with ID" <> user_id <> " not found")
                 user 
-                    -> Lightning.HTTP.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
+                    -> Lightning.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user_id: user_id])
             end
         end
 
@@ -158,7 +158,7 @@ defmodule Lightning.HTTP do
             EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user_id])
 
         # and now use its pre-compiled version passing in the user_id as an argument:
-        Lightning.HTTP.send_eex(conn, res, 200, template_show_user(user_id)) #
+        Lightning.send_eex(conn, res, 200, template_show_user(user_id)) #
         
     """
     def send_eex(conn, res, status, template, vars \\ []) do
@@ -190,10 +190,10 @@ defmodule Lightning.HTTP do
             |> res.put_resp_cookie("abc", "def")
 
             # Parse the body and get value of key 'name'
-            name = Lightning.HTTP.parse_body(conn).params["name"]
+            name = Lightning.parse_body(conn).params["name"]
 
             # Return a text response with status code 200, and "Hello <name>" as response
-            Lightning.HTTP.send_text(conn, res, 200, "Hello " <> name)
+            Lightning.send_text(conn, res, 200, "Hello " <> name)
         end
 
     """

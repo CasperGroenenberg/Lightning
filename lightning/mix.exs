@@ -4,7 +4,7 @@ defmodule Lightning.MixProject do
   def project do
     [
       app: :lightning,
-      version: "0.1.0",
+      version: "0.1.2",
       elixir: "~> 1.6",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule Lightning.MixProject do
       source_url: "https://github.com/casperCX/lightning",
       homepage_url: "https://github.com/casperCX/lightning",
       docs: [
-        main: "Lightning.HTTP", 
+        main: "Lightning", 
         logo: "./lightning_logo_small_white.png",
         extras: ["README.md"]
       ]
@@ -41,7 +41,7 @@ defmodule Lightning.MixProject do
   end
 
   defp description() do
-    "Library for making simple REST API endpoints based on Plug"
+    "Lightning creates simple and fast REST API endpoints based on Plug"
   end
 
     defp package() do
