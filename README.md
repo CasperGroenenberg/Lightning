@@ -16,7 +16,7 @@ defmodule App do
    use Lightning
 
  #Create a new route endpoint
- #Route: GET "/json/" -->
+ #Route: GET "/json/"
  def route("GET", ["json"], conn, res) do
 
     #Set additional response information (based on Plug responses)
@@ -35,7 +35,7 @@ end
 Start up a server using the iex command:
 ```
     iex -S mix
-    iex> {:ok, _} = Plug.Adapters.Cowboy.http App, []
+    iex> {:ok, _} = Lightning.start(5000, App)
 
 Navigating to localhost:4000/json will output JSON response:
 {"name":"Casper","age":26}
