@@ -17,18 +17,18 @@ defmodule App do
    use Lightning
 
  #Create a new route endpoint
- #Route: GET "/json/"
- def route("GET", ["json"], conn, res) do
+ #Route: GET "/helloworld/"
+ def route("GET", ["helloworld"], conn, res) do
 
     #Set additional response information (based on Plug responses)
     conn 
     |> res.put_resp_header("Hello", "World")
-    |> res.put_resp_content_type("application/json")
+    |> res.put_resp_content_type("text/html")
     |> res.put_resp_cookie("abc", "def")
     |> res.put_status(200)
 
-    #Send an JSON response with a statuscode of 200:
-    Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Name"})
+    #Send a text response with a statuscode of 200:
+    Lightning.send_text(conn, res, 200, "Hello world")
 end
 ```
 # Running the server
@@ -39,8 +39,8 @@ Start up a server using the iex command:
     
 ```
 
-Navigating to localhost:5000/json will output JSON response:<br>
-```{"name":"Name","age":26}```
+Navigating to localhost:5000/helloworld will output text response:<br>
+```Hello world```
 
 
 # Example Code
