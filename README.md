@@ -46,4 +46,4 @@ Navigating to localhost:5000/json will output JSON response:<br>
 
 # Example Code
 
-![code example](https://i.imgur.com/hyySEfc.png)
+![code example](https://i.imgur.com/AzH9ROs.png)
