@@ -37,7 +37,7 @@ Start up a server using the iex command:
     iex -S mix
     iex> {:ok, _} = Lightning.start(5000, App, :dev)
 
-Navigating to localhost:4000/json will output JSON response:
+Navigating to localhost:5000/json will output JSON response:
 {"name":"Casper","age":26}
 ```
 
