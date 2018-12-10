@@ -25,7 +25,6 @@ defmodule App do
     |> res.put_resp_header("Hello", "World")
     |> res.put_resp_content_type("application/json")
     |> res.put_resp_cookie("abc", "def")
-    |> res.put_resp_header("X-Delivered-By", "myapp")
     |> res.put_status(200)
 
     #Send an JSON response with a statuscode of 200:
