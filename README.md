@@ -1,8 +1,9 @@
 # Lightning
 
-View the docs: https://hexdocs.pm/lightning/Lightning.html<br>
-
 Lightning is an Elixir library for making simple REST API endpoints based on Plug
+
+[![Hex version badge](https://img.shields.io/hexpm/v/lightning.svg)](https://hex.pm/packages/lightning)
+[![Docs](https://img.shields.io/badge/docs-lightning-blue.svg)](https://hexdocs.pm/lightning/Lightning.html)
 
 
 
@@ -11,7 +12,7 @@ Lightning is an Elixir library for making simple REST API endpoints based on Plu
 Create a new file (App.ex)
 
 
-```
+```elixir
 defmodule App do 
    use Lightning
 
@@ -28,18 +29,20 @@ defmodule App do
     |> res.put_status(200)
 
     #Send an JSON response with a statuscode of 200:
-    Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
+    Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Name"})
 end
 ```
 # Running the server
 Start up a server using the iex command:
-```
+```elixir
     iex -S mix
     iex> {:ok, _} = Lightning.start(5000, App, :dev)
-
-Navigating to localhost:5000/json will output JSON response:
-{"name":"Casper","age":26}
+    
 ```
+
+Navigating to localhost:5000/json will output JSON response:<br>
+{"name":"Name","age":26}
+
 
 # Example Code
 
