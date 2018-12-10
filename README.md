@@ -41,7 +41,7 @@ Start up a server using the iex command:
 ```
 
 Navigating to localhost:5000/json will output JSON response:<br>
-{"name":"Name","age":26}
+```{"name":"Name","age":26}```
 
 
 # Example Code
