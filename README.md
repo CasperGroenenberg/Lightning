@@ -29,6 +29,7 @@ defmodule App do
 
     #Send a text response with a statuscode of 200:
     Lightning.send_text(conn, res, 200, "Hello world")
+   end
 end
 ```
 # Running the server
