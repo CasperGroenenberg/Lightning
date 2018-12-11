@@ -1,5 +1,5 @@
 # Changelog
-<EU date-times (dd-mm-yyyy)>
+(dd-mm-yyyy)
 
 
 ## v0.1.5 (11-12-2018)

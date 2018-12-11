@@ -5,9 +5,9 @@ defmodule Lightning do
 
     Lightning is a library for making simple fast REST API endpoints based on Plug
 
-    WARNING: API subject to change in future 0.x Versions
-    check the changelog for breaking API changes: 
-    https://github.com/CasperCX/Lightning/blob/master/lightning/CHANGELOG.md
+    WARNING: API subject to change in future 0.x versions.<br>
+    check changelog for breaking API changes: 
+    <a href="https://github.com/CasperCX/Lightning/blob/master/lightning/CHANGELOG.md">CHANGELOG</a> 
 
     ## How to get started:
 
