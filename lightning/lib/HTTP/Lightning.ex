@@ -30,7 +30,7 @@ defmodule Lightning do
             |> res.put_status(200)
             
             # Send an JSON response with a statuscode of 200:
-            Lightning.send_json(conn, res, 200, %{"hello" => world})
+            Lightning.send_json(conn, res, 200, %{"hello" => "world"})
         end
 
 
@@ -39,10 +39,18 @@ defmodule Lightning do
             iex -S mix
             iex> {:ok, _} = Lightning.start(5000, App, :dev)
 
-        # Navigating to localhost:5000/json will output JSON response:
+        # Navigating to localhost:5000/helloworld will output JSON response:
         # {"hello":"world"}
 
     """
+
+        # use Plug.Builder
+        #     # plug Plug.Static, at: "/", from: Path.expand("./index.html")
+
+        #     plug Plug.Static,
+        #         at: "/",
+        #         from: :my_app,
+        #         only_matching: ~w(favicon)
 
  
     defmacro __using__(_opts) do
@@ -50,7 +58,6 @@ defmodule Lightning do
             def init(options) do
                 IO.puts "starting up Server... "
                 IO.puts "navigate to localhost:<port> in the browser"
-                IO.puts options
                 options
             end
 
@@ -58,7 +65,7 @@ defmodule Lightning do
             res = Plug.Conn
 
             route(conn.method, conn.path_info, conn, res)
-        end
+            end
         end
     end
 
@@ -78,7 +85,7 @@ defmodule Lightning do
         # Locate to localhost:5000/ in the browser
 
     """
-    def start(port, module, environment \\ :dev) do
+    def start(port, module, _environment \\ :dev) do
         {:ok, _} = Plug.Adapters.Cowboy.http(module, [], port: port)
 
         # TODO hotloading config
@@ -132,7 +139,7 @@ defmodule Lightning do
             |> res.put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
-            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
+            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "My_name"})
         end
 
     """
@@ -201,7 +208,7 @@ defmodule Lightning do
 
         EXAMPLE:
 
-        # Route: POST "/parse?name=casper"
+        # Route: POST "/parse?name=casper&age=26&sex=male
         def route("POST", ["parse"], conn, res) do
 
             # Set additional response information:
@@ -209,17 +216,19 @@ defmodule Lightning do
             |> res.put_resp_content_type("text/html")
             |> res.put_resp_cookie("abc", "def")
 
-            # Parse the body and get value of key 'name'
-            name = Lightning.parse_body(conn).params["name"]
+            # patternmatch the request body and get the values of first two keys and ignoring last
+            [name, age, _] = Lightning.parse_body(conn)
 
-            # Return a text response with status code 200, and "Hello <name>" as response
-            Lightning.send_text(conn, res, 200, "Hello " <> name)
+            # Return a text response with status code 200
+            Lightning.send_text(conn, res, 200, "Hello, name: " <> name <> " age: " <> age)
         end
 
     """
      def parse_body(conn, opts \\ []) do
         opts = Keyword.put_new(opts, :parsers, [Plug.Parsers.URLENCODED, Plug.Parsers.MULTIPART])
-        Plug.Parsers.call(conn, Plug.Parsers.init(opts))
+
+        # Get the values from the param keys and return as a list
+        Plug.Parsers.call(conn, Plug.Parsers.init(opts)).query_params |> Map.values
     end
 
 
@@ -229,4 +238,98 @@ defmodule Lightning do
 
         conn |> res.send_resp(status, body)
     end
+
 end
+
+
+
+
+
+    #    CODE SNIPPETS FOR RESEARCH
+
+    #    use Plug.Router
+        # plug Plug.Static,
+        #     at: "/public",
+        #     from: :my_app,
+        #     only_matching: ~w(favicon)
+
+        # defmodule HttpServer.Router do
+            # use Plug.Router
+
+            # plug(Plug.Logger)
+            # plug(:redirect_index)
+            # plug(:match)
+            # plug(:dispatch)
+
+            # forward("/static", to: HttpServer.StaticResources)
+
+            # get "/sse" do
+            #     # some other stuff...
+            #     conn
+            # end
+
+            # match _ do
+            #     send_resp(conn, 404, "not found")
+            # end
+
+            # def redirect_index(%Plug.Conn{path_info: path} = conn, _opts) do
+            #     case path do
+            #     [] ->
+            #         %{conn | path_info: ["static", "index.html"]}
+
+            #     ["favicon.ico"] ->
+            #         %{conn | path_info: ["static", "favicon.ico"]}
+
+            #     _ ->
+            #         conn
+            #     end
+            # end
+
+    # res = Plug.Conn
+    # case conn.path_info do
+    #         ["favicon.ico"] ->
+    #             # %{conn | path_info: ["static", "favicon.ico"]}
+    #             conn
+
+    #         [] ->
+    #             route(conn.method, conn.path_info, conn, res)
+
+    #         # _ ->
+    #         #     conn
+    #     end
+    
+    
+    # # case conn.path_info do
+    # #     ["favicon.ico"] -> IO.puts("Favicon called")
+
+
+
+
+    # use Plug.Builder
+    # # use Plug.Router
+    # plug(:redirect_index)
+
+    # match _ do
+    #     send_resp(conn, 404, "not found")
+    # end
+
+    # def redirect_index(conn, path_name \\ :path_name) do
+    #     # case conn.path_info do
+    #     # [] ->
+    #     #     %{conn | path_info: [Atom.to_string(path_name)]}
+
+    #     # ["favicon.ico"] ->
+    #     #     %{conn | path_info: ["static", "favicon.ico"]}
+
+    #     # _ ->
+    #     #     conn
+    #     # end
+
+    #         %{conn | path_info: ["ya"]}
+    #         # %{conn | path_info: [Atom.to_string(path_name)]}
+    # end
+    # def redirect(conn) do
+        
+
+    #     %{conn | path_info: ["ya"]}
+    # end
