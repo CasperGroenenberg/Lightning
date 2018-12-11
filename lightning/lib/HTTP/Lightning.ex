@@ -4,7 +4,10 @@ defmodule Lightning do
     @moduledoc """
 
     Lightning is a library for making simple fast REST API endpoints based on Plug
-    WARNING: API subject to change in future 0.x versions
+
+    WARNING: API subject to change in future 0.x Versions
+    check the changelog for breaking API changes: 
+    https://github.com/CasperCX/Lightning/blob/master/lightning/CHANGELOG.md
 
     ## How to get started:
 
@@ -16,8 +19,8 @@ defmodule Lightning do
         use Lightning
    
         # Create a new route endpoint:
-        # Route: GET "/json/"
-        def route("GET", ["json"], conn, res) do
+        # Route: GET "/helloworld/"
+        def route("GET", ["helloworld"], conn, res) do
 
             # Set additional response information (based on Plug responses):
             conn 
@@ -27,17 +30,17 @@ defmodule Lightning do
             |> res.put_status(200)
             
             # Send an JSON response with a statuscode of 200:
-            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "Casper"})
+            Lightning.send_json(conn, res, 200, %{"hello" => world})
         end
 
 
         -----------------------------------------
         Start up a server using the iex command:
             iex -S mix
-            iex> {:ok, _} = Lightning.start(5000, App)
+            iex> {:ok, _} = Lightning.start(5000, App, :dev)
 
         # Navigating to localhost:5000/json will output JSON response:
-        # {"name":"Casper","age":26}
+        # {"hello":"world"}
 
     """
 
@@ -45,7 +48,9 @@ defmodule Lightning do
     defmacro __using__(_opts) do
         quote do
             def init(options) do
-                IO.puts "starting up Server"
+                IO.puts "starting up Server... "
+                IO.puts "navigate to localhost:<port> in the browser"
+                IO.puts options
                 options
             end
 
@@ -75,6 +80,11 @@ defmodule Lightning do
     """
     def start(port, module, environment \\ :dev) do
         {:ok, _} = Plug.Adapters.Cowboy.http(module, [], port: port)
+
+        # TODO hotloading config
+        # case environment do
+        #     :dev -> IO.puts "start hotloading"
+        # end
     end
 
 

@@ -4,7 +4,7 @@ defmodule Lightning.MixProject do
   def project do
     [
       app: :lightning,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.6",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -41,7 +41,7 @@ defmodule Lightning.MixProject do
   end
 
   defp description() do
-    "Lightning creates simple and fast REST API endpoints based on Plug"
+    "Framework for building simple fast REST API endpoints"
   end
 
     defp package() do
