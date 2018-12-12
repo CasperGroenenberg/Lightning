@@ -14,7 +14,8 @@ Create a new file (App.ex)
 
 ```elixir
 defmodule App do 
-   use Lightning
+   use Lightning.HTTP
+   import Lightning
 
  #Create a new route endpoint
  #Route: GET "/helloworld/"
@@ -28,7 +29,7 @@ defmodule App do
     |> res.put_status(200)
 
     #Send a text response with a statuscode of 200:
-    Lightning.send_text(conn, res, 200, "Hello world")
+    send_text(conn, res, 200, "Hello world")
    end
 end
 ```
