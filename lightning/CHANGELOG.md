@@ -2,11 +2,29 @@
 (dd-mm-yyyy)
 
 
+## v0.1.6 (12-12-2018)
+
+	* v0.1.5 API CHANGES
+```elixir
+	#NEW parse_key function:
+		#EXAMPLE:
+			name = parse_key(conn, :name)
+
+	#Changed architecture of core Modules
+	#Using the Lightning library now requires:
+		FROM: use Lightning
+
+		TO:	  use Lightning.HTTP
+			  import Lightning
+
+	#All code does not have to be prefixed by the Lightning.* annotation EXCEPT: Lightning.start(<port><module><environment>)
+````
+
 ## v0.1.5 (11-12-2018)
 
 	* v0.1.5 API CHANGES
 ```elixir
-	#NEW pattern matching functionality for parse_body function
+	#NEW pattern matching functionality for parse_body function:
 		FROM: name = Lightning.parse_body(conn).params["name"]
 		TO:   [name, age] = Lightning.parse_body(conn)
 ````

@@ -16,23 +16,23 @@ defmodule Lightning do
         defmodule App do
 
         # Use the Lightning library
-        use Lightning
+            use Lightning.HTTP
+            import Lightning
    
         # Create a new route endpoint:
         # Route: GET "/helloworld/"
-        def route("GET", ["helloworld"], conn, res) do
+            def route("GET", ["helloworld"], conn, res) do
 
-            # Set additional response information (based on Plug responses):
-            conn 
-            |> res.put_resp_header("Header", "Here")
-            |> res.put_resp_content_type("application/json")
-            |> res.put_resp_cookie("abc", "def")
-            |> res.put_status(200)
-            
-            # Send an JSON response with a statuscode of 200:
-            Lightning.send_json(conn, res, 200, %{"hello" => "world"})
-        end
-
+                # Set additional response information (based on Plug responses):
+                conn 
+                |> res.put_resp_header("Header", "Here")
+                |> res.put_resp_content_type("application/json")
+                |> res.put_resp_cookie("abc", "def")
+                |> res.put_status(200)
+                
+                # Send an JSON response with a statuscode of 200:
+                send_json(conn, res, 200, %{"hello" => "world"})
+            end
 
         -----------------------------------------
         Start up a server using the iex command:
@@ -43,32 +43,6 @@ defmodule Lightning do
         # {"hello":"world"}
 
     """
-
-        # use Plug.Builder
-        #     # plug Plug.Static, at: "/", from: Path.expand("./index.html")
-
-        #     plug Plug.Static,
-        #         at: "/",
-        #         from: :my_app,
-        #         only_matching: ~w(favicon)
-
- 
-    defmacro __using__(_opts) do
-        quote do
-            def init(options) do
-                IO.puts "starting up Server... "
-                IO.puts "navigate to localhost:<port> in the browser"
-                options
-            end
-
-        def call(conn, _opts) do
-            res = Plug.Conn
-
-            route(conn.method, conn.path_info, conn, res)
-            end
-        end
-    end
-
 
     @doc """
     Start the server.
@@ -96,7 +70,6 @@ defmodule Lightning do
 
 
 
-
     @doc """
     Text Response.
 
@@ -113,7 +86,7 @@ defmodule Lightning do
             |> res.put_resp_content_type("text/html")
 
             # Send an text response with a statuscode of 200:
-            Lightning.send_text(conn, res, 200, "Hello from text response " <> firstname <> lastname)
+            send_text(conn, res, 200, "Hello from text response " <> firstname <> lastname)
         end
 
     """
@@ -139,7 +112,7 @@ defmodule Lightning do
             |> res.put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
-            Lightning.send_json(conn, res, 200, %{"age" => 26, "name" => "My_name"})
+            send_json(conn, res, 200, %{"age" => 26, "name" => "My_name"})
         end
 
     """
@@ -169,9 +142,9 @@ defmodule Lightning do
             # Example using Ecto, returning different responses based on condition:
             case App.Repo.get(User, user_id) do
                 nil 
-                    -> Lightning.send_text(conn, res, 404, "User with ID " <> user_id <> " not found")
+                    -> send_text(conn, res, 404, "User with ID " <> user_id <> " not found")
                 user 
-                    -> Lightning.send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user: user, user_id: user_id])
+                    -> send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user: user, user_id: user_id])
             end
         end
 
@@ -185,7 +158,7 @@ defmodule Lightning do
             EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user, :user_id])
 
         # and now use its pre-compiled version passing in the user and user_id as arguments:
-        Lightning.send_eex(conn, res, 200, template_show_user(user, user_id)) #
+        send_eex(conn, res, 200, template_show_user(user, user_id)) #
         
     """
     def send_eex(conn, res, status, template, vars \\ []) do
@@ -211,16 +184,11 @@ defmodule Lightning do
         # Route: POST "/parse?name=casper&age=26&sex=male
         def route("POST", ["parse"], conn, res) do
 
-            # Set additional response information:
-            conn 
-            |> res.put_resp_content_type("text/html")
-            |> res.put_resp_cookie("abc", "def")
-
             # patternmatch the request body and get the values of first two keys and ignoring last
-            [name, age, _] = Lightning.parse_body(conn)
+            [name, age, _] = parse_body(conn)
 
             # Return a text response with status code 200
-            Lightning.send_text(conn, res, 200, "Hello, name: " <> name <> " age: " <> age)
+            send_text(conn, res, 200, "Hello, name: " <> name <> " age: " <> age)
         end
 
     """
@@ -230,6 +198,34 @@ defmodule Lightning do
         # Get the values from the param keys and return as a list
         Plug.Parsers.call(conn, Plug.Parsers.init(opts)).query_params |> Map.values
     end
+
+
+
+     @doc """
+    Parse the incoming request key.
+
+    ## Parse incoming key
+
+        EXAMPLE:
+
+        # Route: POST "/parse?name=casper
+        def route("POST", ["parse"], conn, res) do
+
+            # Request the value of key: name
+            name = parse_key(conn, :name)
+
+            # Return a text response with status code 200
+            send_text(conn, res, 200, "Hello, name: " <> name)
+        end
+
+    """
+    def parse_key(conn, key, opts \\ []) do
+        opts = Keyword.put_new(opts, :parsers, [Plug.Parsers.URLENCODED, Plug.Parsers.MULTIPART])
+
+        # Get the values from the param keys and return as a list
+        Plug.Parsers.call(conn, Plug.Parsers.init(opts)).params[Atom.to_string(key)]
+    end
+
 
 
     #TODO
