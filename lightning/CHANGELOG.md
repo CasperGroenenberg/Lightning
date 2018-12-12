@@ -3,7 +3,7 @@
 
 
 ## v0.1.6 (12-12-2018)
-	* v0.1.5 API CHANGES
+	* v0.1.6 API CHANGES
 ```elixir
 	#NEW parse_key function:
 		#EXAMPLE:
