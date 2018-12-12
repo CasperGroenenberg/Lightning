@@ -3,7 +3,6 @@
 
 
 ## v0.1.6 (12-12-2018)
-
 	* v0.1.5 API CHANGES
 ```elixir
 	#NEW parse_key function:
@@ -17,11 +16,11 @@
 		TO:	  use Lightning.HTTP
 			  import Lightning
 
-	#All code does not have to be prefixed by the Lightning.* annotation EXCEPT: Lightning.start(<port><module><environment>)
+	#All code does not have to be prefixed by the Lightning.* annotation
+	#EXCEPT: Lightning.start(<port><module><environment>)
 ````
 
 ## v0.1.5 (11-12-2018)
-
 	* v0.1.5 API CHANGES
 ```elixir
 	#NEW pattern matching functionality for parse_body function:
@@ -30,12 +29,10 @@
 ````
 
 ## v0.1.4 (11-12-2018)
-
 	* Fixed critical bug that prevented the server from booting up
 
 
 ## v0.1.3 (9-12-2018)
-
 	* v0.1.3 API CHANGES
 ```elixir
 	#Created abstraction (Lightning.start) for server startup
@@ -45,7 +42,6 @@
 			
 
 ## v0.1.2 (9-12-2018)
-
 	* v0.1.2 API CHANGES
 ```elixir
 	#Changed ambiguous naming of module Lightning.HTTP to Lightning
@@ -57,12 +53,10 @@
 
 
 ## v0.1.1 (7-12-2018)
-
 	* Updated docs
 	* fixed errors in docs
 	* Added logo
 
 
 ## v0.1.0 (7-12-2018)
-
 	  * First release
