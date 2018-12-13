@@ -13,8 +13,8 @@
 		FROM: send_json(conn, res, 200, %{"Hello" => "World"})
 		TO:	  json(conn, 200, %{"Hello" => "World"})
 
-		FROM: send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [greeting: "Hello"])
-		TO:	  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [greeting: "Hello"])
+		FROM: send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [hi: "hi"])
+		TO:	  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [hi: "hi"])
 
 
 	#All code does not have to be prefixed by the Lightning.* annotation EXCEPT: Lightning.start(<port><module><environment>)
@@ -60,9 +60,9 @@
 			
 
 ## v0.1.2 (9-12-2018)
-	* v0.1.2 API CHANGES
 	* Updated docs to reflect name changes
 	* Added TODO file
+	* v0.1.2 API CHANGES
 ```elixir
 	#Changed ambiguous naming of module Lightning.HTTP to Lightning
 		FROM: use Lightning.HTTP<br>
