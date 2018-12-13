@@ -17,7 +17,7 @@
 		TO:	  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [hi: "hi"])
 
 
-	#All code does not have to be prefixed by the Lightning.* annotation EXCEPT: Lightning.start(<port><module><environment>)
+	#All code does not have to be prefixed by the Lightning.* 
 ````
 
 
