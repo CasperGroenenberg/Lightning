@@ -15,9 +15,6 @@
 
 		FROM: send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [hi: "hi"])
 		TO:	  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [hi: "hi"])
-
-
-	#All code does not have to be prefixed by the Lightning.* 
 ````
 
 
