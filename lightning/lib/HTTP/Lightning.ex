@@ -3,7 +3,7 @@ defmodule Lightning do
 
     @moduledoc """
 
-    Lightning is a library for making simple fast REST API endpoints based on Plug
+    Lightning is a library for making simple REST API endpoints based on Plug
 
     WARNING: API subject to change in future 0.x versions.<br>
     check changelog for breaking API changes: 
@@ -16,23 +16,22 @@ defmodule Lightning do
         defmodule App do
 
         # Use the Lightning library
-            use Lightning.HTTP
-            import Lightning
+        use Lightning.HTTP
+        import Lightning
    
-        # Create a new route endpoint:
-        # Route: GET "/helloworld/"
-            def route("GET", ["helloworld"], conn, res) do
+        # New Route: GET "/helloworld/"
+        def route("GET", ["helloworld"], conn, res) do
 
-                # Set additional response information (based on Plug responses):
-                conn 
-                |> res.put_resp_header("Header", "Here")
-                |> res.put_resp_content_type("application/json")
-                |> res.put_resp_cookie("abc", "def")
-                |> res.put_status(200)
-                
-                # Send an JSON response with a statuscode of 200:
-                send_json(conn, res, 200, %{"hello" => "world"})
-            end
+            # Set additional response information (based on Plug responses):
+            conn 
+            |> res.put_resp_header("Header", "Here")
+            |> res.put_resp_content_type("application/json")
+            |> res.put_resp_cookie("abc", "def")
+            |> res.put_status(200)
+            
+            # Send an JSON response with a statuscode of 200:
+            json(conn, 200, %{"hello" => "world"})
+        end
 
         -----------------------------------------
         Start up a server using the iex command:
@@ -86,12 +85,13 @@ defmodule Lightning do
             |> res.put_resp_content_type("text/html")
 
             # Send an text response with a statuscode of 200:
-            send_text(conn, res, 200, "Hello from text response " <> firstname <> lastname)
+            text(conn, 200, "Hello from text response " <> firstname <> lastname)
         end
 
     """
-    def send_text(conn, res, status, body) do
-        conn |> res.send_resp(status, body)
+    def text(conn, status, body) do
+        conn |> Plug.Conn.send_resp(status, body)
+        # conn |> res.send_resp(status, body)
     end
 
 
@@ -112,14 +112,14 @@ defmodule Lightning do
             |> res.put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
-            send_json(conn, res, 200, %{"age" => 26, "name" => "My_name"})
+            json(conn, 200, %{"age" => 26, "name" => "My_name"})
         end
 
     """
-    def send_json(conn, res, status, body) do
+    def json(conn, status, body) do
         resp_body = body |> Poison.encode!()
 
-        conn |> res.send_resp(status, resp_body)
+        conn |> Plug.Conn.send_resp(status, resp_body)
     end
 
 
@@ -142,9 +142,9 @@ defmodule Lightning do
             # Example using Ecto, returning different responses based on condition:
             case App.Repo.get(User, user_id) do
                 nil 
-                    -> send_text(conn, res, 404, "User with ID " <> user_id <> " not found")
+                    -> text(conn, 404, "User with ID " <> user_id <> " not found")
                 user 
-                    -> send_eex(conn, res, 200, Path.expand("./lib/templates/show_user.eex"), [user: user, user_id: user_id])
+                    -> eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [user: user, user_id: user_id])
             end
         end
 
@@ -158,16 +158,16 @@ defmodule Lightning do
             EEx.function_from_file(:def, :template_show_user, Path.expand("./lib/templates/show_user.eex"), [:user, :user_id])
 
         # and now use its pre-compiled version passing in the user and user_id as arguments:
-        send_eex(conn, res, 200, template_show_user(user, user_id)) #
+        eex(conn, 200, template_show_user(user, user_id)) #
         
     """
-    def send_eex(conn, res, status, template, vars \\ []) do
+    def eex(conn, status, template, vars \\ []) do
         case vars do
             # Precompiled version
-            [] -> conn |> res.send_resp(status, template)
+            [] -> conn |> Plug.Conn.send_resp(status, template)
 
             _  ->  page_contents = EEx.eval_file(template, vars) 
-                    conn |> res.send_resp(status, page_contents)
+                    conn |> Plug.Conn.send_resp(status, page_contents)
 
         end   
     end
@@ -177,7 +177,7 @@ defmodule Lightning do
     @doc """
     Parse the incoming request body.
 
-    ## Parse incoming requests
+    ## Parse incoming request body
 
         EXAMPLE:
 
@@ -188,7 +188,7 @@ defmodule Lightning do
             [name, age, _] = parse_body(conn)
 
             # Return a text response with status code 200
-            send_text(conn, res, 200, "Hello, name: " <> name <> " age: " <> age)
+            text(conn, 200, "Hello, name: " <> name <> " age: " <> age)
         end
 
     """
@@ -215,7 +215,7 @@ defmodule Lightning do
             name = parse_key(conn, :name)
 
             # Return a text response with status code 200
-            send_text(conn, res, 200, "Hello, name: " <> name)
+            text(conn, 200, "Hello, name: " <> name)
         end
 
     """
@@ -226,6 +226,35 @@ defmodule Lightning do
         Plug.Parsers.call(conn, Plug.Parsers.init(opts)).params[Atom.to_string(key)]
     end
 
+    def redirect(conn, path_name) do
+        # TODO
+        # Look up if path_name is a registered route
+        # lightning.Annotations.annotation
+
+        # GOTO route url defined in annotation
+        # conn |> Plug.Conn.
+
+        case path_name do
+                ["favicon.ico"] ->
+                    %{conn | path_info: path_name}
+                _ ->
+                     %{conn | path_info: path_name}
+            end
+        end
+
+         # def redirect_index(%Plug.Conn{path_info: path} = conn, _opts) do
+            #     case path do
+            #     [] ->
+            #         %{conn | path_info: ["static", "index.html"]}
+
+            #     ["favicon.ico"] ->
+            #         %{conn | path_info: ["static", "favicon.ico"]}
+
+            #     _ ->
+            #         conn
+            #     end
+            # end
+   
 
 
     #TODO

@@ -9,7 +9,8 @@ defmodule Lightning.HTTP do
 
             def call(conn, _opts) do
                 res = Plug.Conn
-
+                # conn.method |> Atom.to_string |> String.capitalize
+                # IO.puts conn.method
                 route(conn.method, conn.path_info, conn, res)
             end
         end
