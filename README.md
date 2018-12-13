@@ -47,4 +47,4 @@ Navigating to localhost:5000/helloworld will output text response:<br>
 
 # Example Code
 
-![code example](https://i.imgur.com/4kArsXO.png)
+![code example](https://i.imgur.com/NFtGJmj.png)
