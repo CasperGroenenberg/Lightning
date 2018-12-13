@@ -29,7 +29,7 @@ defmodule App do
     |> res.put_status(200)
 
     #Send a text response with a statuscode of 200:
-    send_text(conn, res, 200, "Hello world")
+    text(conn, 200, "Hello world")
    end
 end
 ```
