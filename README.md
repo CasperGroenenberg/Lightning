@@ -19,14 +19,14 @@ defmodule App do
 
  #Create a new route endpoint
  #Route: GET "/helloworld/"
- def route("GET", ["helloworld"], conn, res) do
+ def route("GET", ["helloworld"], conn) do
 
     #Set additional response information (based on Plug responses)
     conn 
-    |> res.put_resp_header("Hello", "World")
-    |> res.put_resp_content_type("text/html")
-    |> res.put_resp_cookie("abc", "def")
-    |> res.put_status(200)
+    |> put_resp_header("Hello", "World")
+    |> put_resp_content_type("text/html")
+    |> put_resp_cookie("abc", "def")
+    |> put_status(200)
 
     #Send a text response with a statuscode of 200:
     text(conn, 200, "Hello world")
@@ -47,4 +47,4 @@ Navigating to localhost:5000/helloworld will output text response:<br>
 
 # Example Code
 
-![code example](https://i.imgur.com/NFtGJmj.png)
+![code example](https://i.imgur.com/DYQREls.png)
