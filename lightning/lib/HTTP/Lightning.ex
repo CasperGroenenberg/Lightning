@@ -3,7 +3,7 @@ defmodule Lightning do
 
     @moduledoc """
 
-    Lightning is a library for making simple REST API endpoints based on Plug
+    Lightning is a framework for making simple REST API endpoints based on Plug
 
     WARNING: API subject to change in future 0.x versions.<br>
     check changelog for breaking API changes: 
@@ -20,14 +20,14 @@ defmodule Lightning do
         import Lightning
    
         # New Route: GET "/helloworld/"
-        def route("GET", ["helloworld"], conn, res) do
+        def route("GET", ["helloworld"], conn) do
 
             # Set additional response information (based on Plug responses):
             conn 
-            |> res.put_resp_header("Header", "Here")
-            |> res.put_resp_content_type("application/json")
-            |> res.put_resp_cookie("abc", "def")
-            |> res.put_status(200)
+            |> put_resp_header("Header", "Here")
+            |> put_resp_content_type("application/json")
+            |> put_resp_cookie("abc", "def")
+            |> put_status(200)
             
             # Send an JSON response with a statuscode of 200:
             json(conn, 200, %{"hello" => "world"})
@@ -42,6 +42,12 @@ defmodule Lightning do
         # {"hello":"world"}
 
     """
+
+    # TODO
+    # def start(port, modules, _environment \\ :dev) when is_list(modules) do
+        # modules |> Enum.each(fn(mod) -> {:ok, _} = Plug.Cowboy.http(mod, [], port: port))
+    # end
+
 
     @doc """
     Start the server.
@@ -58,14 +64,41 @@ defmodule Lightning do
         # Locate to localhost:5000/ in the browser
 
     """
-    def start(port, module, _environment \\ :dev) do
-        {:ok, _} = Plug.Adapters.Cowboy.http(module, [], port: port)
+    def start(port, module, _environment) do
+        {:ok, _} = Plug.Cowboy.http(module, [], port: port)
 
         # TODO hotloading config
         # case environment do
         #     :dev -> IO.puts "start hotloading"
         # end
     end
+
+
+  
+
+
+    def response(conn, status, body) when is_bitstring(body) do
+         conn |> Plug.Conn.send_resp(status, body)
+    end
+
+
+    def response(conn, status, body) when is_map(body) do
+        resp_body = body |> Poison.encode!()
+
+        conn |> Plug.Conn.send_resp(status, resp_body)
+    end
+
+
+    def response(conn, status, template, vars \\ []) do
+        case vars do
+        # Precompiled version
+        [] -> conn |> Plug.Conn.send_resp(status, template)
+
+        _  ->  page_contents = EEx.eval_file(template, vars) 
+                conn |> Plug.Conn.send_resp(status, page_contents)
+        end
+    end
+
 
 
 
@@ -77,12 +110,12 @@ defmodule Lightning do
         EXAMPLE:
 
         # Route: GET "/hello/:firstname/:lastname/"
-         def route("GET", ["hello", firstname, lastname], conn, res) do
+         def route("GET", ["hello", firstname, lastname], conn) do
 
             # Set additional response information:
             conn 
-            |> res.put_resp_header("Header", "Here")
-            |> res.put_resp_content_type("text/html")
+            |> put_resp_header("Header", "Here")
+            |> put_resp_content_type("text/html")
 
             # Send an text response with a statuscode of 200:
             text(conn, 200, "Hello from text response " <> firstname <> lastname)
@@ -104,12 +137,12 @@ defmodule Lightning do
         EXAMPLE:
 
         # Route: GET "/json/"
-        def route("GET", ["json"], conn, res) do
+        def route("GET", ["json"], conn) do
 
             # Set additional response information:
             conn 
-            |> res.put_resp_header("Header", "Here")
-            |> res.put_resp_content_type("application/json")
+            |> put_resp_header("Header", "Here")
+            |> put_resp_content_type("application/json")
 
             # Send an JSON response with a statuscode of 200:
             json(conn, 200, %{"age" => 26, "name" => "My_name"})
@@ -132,12 +165,12 @@ defmodule Lightning do
         EXAMPLE:
 
         # Route: GET "/user/:user_id/"
-        def route("GET", ["user", user_id], conn, res) do
+        def route("GET", ["user", user_id], conn) do
 
             # Set additional response information
             conn 
-            |> res.put_resp_header("Header", "Here")
-            |> res.put_resp_content_type("text/html")
+            |> put_resp_header("Header", "Here")
+            |> put_resp_content_type("text/html")
 
             # Example using Ecto, returning different responses based on condition:
             case App.Repo.get(User, user_id) do
@@ -182,7 +215,7 @@ defmodule Lightning do
         EXAMPLE:
 
         # Route: POST "/parse?name=casper&age=26&sex=male
-        def route("POST", ["parse"], conn, res) do
+        def route("POST", ["parse"], conn) do
 
             # patternmatch the request body and get the values of first two keys and ignoring last
             [name, age, _] = parse_body(conn)
@@ -209,7 +242,7 @@ defmodule Lightning do
         EXAMPLE:
 
         # Route: POST "/parse?name=casper
-        def route("POST", ["parse"], conn, res) do
+        def route("POST", ["parse"], conn) do
 
             # Request the value of key: name
             name = parse_key(conn, :name)
@@ -258,10 +291,10 @@ defmodule Lightning do
 
 
     #TODO
-    def parse_json(conn, res, status, body) do
+    def parse_json(conn, status, body) do
         IO.puts "parsing JSON"
 
-        conn |> res.send_resp(status, body)
+        conn |> Plug.Conn.send_resp(status, body)
     end
 
 end

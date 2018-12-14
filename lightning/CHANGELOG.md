@@ -2,8 +2,33 @@
 (dd-mm-yyyy)
 
 
+## v0.1.8 (14-12-2018)
+	#FIXED: Adding response data now work correctly
+	* v0.1.8 API CHANGES
+```elixir
+	#Omitted the use of the res keyword for response operations
+		  	FROM: def route("GET", ["text"], conn, res) do
+			TO:   def route("GET", ["text"], conn) do
+
+			FROM: text(conn, res, 200, "Hello World")
+			TO:	  text(conn, 200, "Hello World")
+````
+```elixir
+	#NEW: global response function:
+			FROM: text(conn, 200, "Hello World")
+				  json(conn, 200, %{"hello" => "world"})
+				  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"),[user: user])
+
+			TO:	response(conn, 200, "Hello World")
+				response(conn, 200, %{"hello" => "world"})
+				response(conn, 200, Path.expand("./lib/templates/show_user.eex"),[user: user])
+
+			* json/3, text/3, eex/4, can still be used normally alongside the new response function
+````
+
+
 ## v0.1.7 (13-12-2018)
-	#Added annotations BETA
+	* Added annotations BETA
 	* v0.1.7 API CHANGES
 ```elixir
 	#Changed reponse API
@@ -17,14 +42,14 @@
 		TO:	  eex(conn, 200, Path.expand("./lib/templates/show_user.eex"), [greeting: "Hello"])
 
 
-	#All code does not have to be prefixed by the Lightning.* annotation EXCEPT: Lightning.start(<port><module><environment>)
+	#All code does not have to be prefixed by the Lightning.* 
 ````
 
 
 ## v0.1.6 (12-12-2018)
 	* v0.1.6 API CHANGES
 ```elixir
-	#NEW parse_key function:
+	#NEW: parse_key function:
 		#EXAMPLE:
 			name = parse_key(conn, :name)
 
@@ -41,7 +66,7 @@
 ## v0.1.5 (11-12-2018)
 	* v0.1.5 API CHANGES
 ```elixir
-	#NEW pattern matching functionality for parse_body function:
+	#NEW: pattern matching functionality for parse_body function:
 		FROM: name = Lightning.parse_body(conn).params["name"]
 		TO:   [name, age] = Lightning.parse_body(conn)
 ````
