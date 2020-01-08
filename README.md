@@ -1,6 +1,6 @@
 # Lightning
 
-Lightning is an Elixir framework for making simple REST API endpoints based on Plug
+Lightning is an Elixir package for making simple REST API endpoints based on Plug
 
 [![Hex version badge](https://img.shields.io/hexpm/v/lightning.svg)](https://hex.pm/packages/lightning)
 [![Docs](https://img.shields.io/badge/docs-lightning-blue.svg)](https://hexdocs.pm/lightning/Lightning.html)
